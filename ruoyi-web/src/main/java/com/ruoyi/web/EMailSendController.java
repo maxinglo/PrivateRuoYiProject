@@ -1,4 +1,4 @@
-package com.ruoyi.web.controller.tool;
+package com.ruoyi.web;
 
 import com.ruoyi.common.SustechEmail.SustechEmail;
 import com.ruoyi.common.annotation.Anonymous;
@@ -7,7 +7,6 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.web.service.impl.EMailSendServiceImpl;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Api("邮件发送")
 @Validated
 @Anonymous
 @RestController
-@RequestMapping("/system/Email")
+@RequestMapping("/web/Email")
 public class EMailSendController extends BaseController {
     @Autowired
     private EMailSendServiceImpl eMailSendServiceImpl;
@@ -46,5 +44,10 @@ public class EMailSendController extends BaseController {
         }else {
             return error();
         }
+    }
+    @GetMapping("/Test")
+    public AjaxResult Test() {
+        System.out.println("方法触发");
+        return success();
     }
 }

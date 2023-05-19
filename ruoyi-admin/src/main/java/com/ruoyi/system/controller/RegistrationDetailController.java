@@ -2,6 +2,8 @@ package com.ruoyi.system.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.annotation.Anonymous;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author Maxing
  * @date 2023-05-06
  */
+@Anonymous
 @RestController
 @RequestMapping("/system/RegistrationDetails")
 public class RegistrationDetailController extends BaseController

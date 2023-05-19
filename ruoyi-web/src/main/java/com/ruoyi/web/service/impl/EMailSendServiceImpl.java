@@ -11,9 +11,6 @@ import org.thymeleaf.TemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.naming.Context;
-import javax.validation.constraints.Email;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 

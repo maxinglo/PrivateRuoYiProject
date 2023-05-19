@@ -1,8 +1,6 @@
 package com.ruoyi.web.service.impl;
 
-import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.web.service.IVerificationCodeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
