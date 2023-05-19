@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.RegistrationDetailMapper">
+    
+    <resultMap type="RegistrationDetail" id="RegistrationDetailResult">
+        <result property="id"    column="id"    />
+        <result property="masterId"    column="master_id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="name"    column="name"    />
+        <result property="gender"    column="gender"    />
+        <result property="idCardNumber"    column="id_card_number"    />
+        <result property="project1"    column="project1"    />
+        <result property="project2"    column="project2"    />
+        <result property="relayRace"    column="relay_race"    />
+        <result property="tugOfWar"    column="tug_of_war"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectRegistrationDetailVo">
+        select id, master_id, student_id, name, gender, id_card_number, project1, project2, relay_race, tug_of_war, remark from registration_detail
+    </sql>
+
+    <select id="selectRegistrationDetailList" parameterType="RegistrationDetail" resultMap="RegistrationDetailResult">
+        <include refid="selectRegistrationDetailVo"/>
+        <where>  
+            <if test="masterId != null "> and master_id = #{masterId}</if>
+            <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="idCardNumber != null  and idCardNumber != ''"> and id_card_number = #{idCardNumber}</if>
+            <if test="project1 != null  and project1 != ''"> and project1 = #{project1}</if>
+            <if test="project2 != null  and project2 != ''"> and project2 = #{project2}</if>
+            <if test="relayRace != null  and relayRace != ''"> and relay_race = #{relayRace}</if>
+            <if test="tugOfWar != null  and tugOfWar != ''"> and tug_of_war = #{tugOfWar}</if>
+        </where>
+    </select>
+    
+    <select id="selectRegistrationDetailById" parameterType="Long" resultMap="RegistrationDetailResult">
+        <include refid="selectRegistrationDetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRegistrationDetail" parameterType="RegistrationDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into registration_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="masterId != null">master_id,</if>
+            <if test="studentId != null and studentId != ''">student_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="gender != null and gender != ''">gender,</if>
+            <if test="idCardNumber != null and idCardNumber != ''">id_card_number,</if>
+            <if test="project1 != null and project1 != ''">project1,</if>
+            <if test="project2 != null and project2 != ''">project2,</if>
+            <if test="relayRace != null and relayRace != ''">relay_race,</if>
+            <if test="tugOfWar != null and tugOfWar != ''">tug_of_war,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="masterId != null">#{masterId},</if>
+            <if test="studentId != null and studentId != ''">#{studentId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="idCardNumber != null and idCardNumber != ''">#{idCardNumber},</if>
+            <if test="project1 != null and project1 != ''">#{project1},</if>
+            <if test="project2 != null and project2 != ''">#{project2},</if>
+            <if test="relayRace != null and relayRace != ''">#{relayRace},</if>
+            <if test="tugOfWar != null and tugOfWar != ''">#{tugOfWar},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRegistrationDetail" parameterType="RegistrationDetail">
+        update registration_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="masterId != null">master_id = #{masterId},</if>
+            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="idCardNumber != null and idCardNumber != ''">id_card_number = #{idCardNumber},</if>
+            <if test="project1 != null and project1 != ''">project1 = #{project1},</if>
+            <if test="project2 != null and project2 != ''">project2 = #{project2},</if>
+            <if test="relayRace != null and relayRace != ''">relay_race = #{relayRace},</if>
+            <if test="tugOfWar != null and tugOfWar != ''">tug_of_war = #{tugOfWar},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRegistrationDetailById" parameterType="Long">
+        delete from registration_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteRegistrationDetailByIds" parameterType="String">
+        delete from registration_detail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

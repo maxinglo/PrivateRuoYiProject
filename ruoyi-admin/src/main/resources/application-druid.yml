@@ -1,5 +1,16 @@
 # 数据源配置
 spring:
+    mail:
+        host: smtp.qq.com   # 设置邮箱主机(服务商),这里使用QQ邮件服务器
+        username: 2965346066@qq.com  # 设置用户名
+        password: ajropgmofylmdhcb # 设置密码，该处的密码是QQ邮箱开启SMTP的授权码而非QQ密码
+        properties:
+            mail:
+                smtp:
+                    auth: true  # 必须进行授权认证，它的目的就是阻止他人任意乱发邮件
+                    starttls: #SMTP加密方式:连接到一个TLS保护连接
+                        enable: true
+                        required: true
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.RegistrationMasterMapper">
+    
+    <resultMap type="RegistrationMaster" id="RegistrationMasterResult">
+        <result property="id"    column="id"    />
+        <result property="teamGroup"    column="team_group"    />
+        <result property="teamName"    column="team_name"    />
+        <result property="teamLeader"    column="team_leader"    />
+        <result property="teamCaptain"    column="team_captain"    />
+        <result property="coach"    column="coach"    />
+        <result property="staff"    column="staff"    />
+        <result property="teamDoctor"    column="team_doctor"    />
+        <result property="contactInfo"    column="contact_info"    />
+    </resultMap>
+
+    <resultMap id="RegistrationMasterRegistrationDetailResult" type="RegistrationMaster" extends="RegistrationMasterResult">
+        <collection property="registrationDetailList" notNullColumn="sub_id" javaType="java.util.List" resultMap="RegistrationDetailResult" />
+    </resultMap>
+
+    <resultMap type="RegistrationDetail" id="RegistrationDetailResult">
+        <result property="id"    column="sub_id"    />
+        <result property="masterId"    column="sub_master_id"    />
+        <result property="studentId"    column="sub_student_id"    />
+        <result property="name"    column="sub_name"    />
+        <result property="gender"    column="sub_gender"    />
+        <result property="idCardNumber"    column="sub_id_card_number"    />
+        <result property="project1"    column="sub_project1"    />
+        <result property="project2"    column="sub_project2"    />
+        <result property="relayRace"    column="sub_relay_race"    />
+        <result property="tugOfWar"    column="sub_tug_of_war"    />
+        <result property="remark"    column="sub_remark"    />
+    </resultMap>
+
+    <sql id="selectRegistrationMasterVo">
+        select id, team_group, team_name, team_leader, team_captain, coach, staff, team_doctor, contact_info from registration_master
+    </sql>
+
+    <select id="selectRegistrationMasterList" parameterType="RegistrationMaster" resultMap="RegistrationMasterResult">
+        <include refid="selectRegistrationMasterVo"/>
+        <where>  
+            <if test="teamGroup != null  and teamGroup != ''"> and team_group = #{teamGroup}</if>
+            <if test="teamName != null  and teamName != ''"> and team_name like concat('%', #{teamName}, '%')</if>
+            <if test="teamLeader != null  and teamLeader != ''"> and team_leader like concat('%', #{teamLeader}, '%')</if>
+            <if test="teamCaptain != null  and teamCaptain != ''"> and team_captain like concat('%', #{teamCaptain}, '%')</if>
+            <if test="coach != null  and coach != ''"> and coach like concat('%', #{coach}, '%')</if>
+            <if test="staff != null  and staff != ''"> and staff like concat('%', #{staff}, '%')</if>
+            <if test="teamDoctor != null  and teamDoctor != ''"> and team_doctor like concat('%', #{teamDoctor}, '%')</if>
+            <if test="contactInfo != null  and contactInfo != ''"> and contact_info = #{contactInfo}</if>
+        </where>
+    </select>
+    
+    <select id="selectRegistrationMasterById" parameterType="Long" resultMap="RegistrationMasterRegistrationDetailResult">
+        select a.id, a.team_group, a.team_name, a.team_leader, a.team_captain, a.coach, a.staff, a.team_doctor, a.contact_info,
+ b.id as sub_id, b.master_id as sub_master_id, b.student_id as sub_student_id, b.name as sub_name, b.gender as sub_gender, b.id_card_number as sub_id_card_number, b.project1 as sub_project1, b.project2 as sub_project2, b.relay_race as sub_relay_race, b.tug_of_war as sub_tug_of_war, b.remark as sub_remark
+        from registration_master a
+        left join registration_detail b on b.id = a.id
+        where a.id = #{id}
+    </select>
+        
+    <insert id="insertRegistrationMaster" parameterType="RegistrationMaster" useGeneratedKeys="true" keyProperty="id">
+        insert into registration_master
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teamGroup != null and teamGroup != ''">team_group,</if>
+            <if test="teamName != null and teamName != ''">team_name,</if>
+            <if test="teamLeader != null and teamLeader != ''">team_leader,</if>
+            <if test="teamCaptain != null and teamCaptain != ''">team_captain,</if>
+            <if test="coach != null and coach != ''">coach,</if>
+            <if test="staff != null and staff != ''">staff,</if>
+            <if test="teamDoctor != null and teamDoctor != ''">team_doctor,</if>
+            <if test="contactInfo != null and contactInfo != ''">contact_info,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teamGroup != null and teamGroup != ''">#{teamGroup},</if>
+            <if test="teamName != null and teamName != ''">#{teamName},</if>
+            <if test="teamLeader != null and teamLeader != ''">#{teamLeader},</if>
+            <if test="teamCaptain != null and teamCaptain != ''">#{teamCaptain},</if>
+            <if test="coach != null and coach != ''">#{coach},</if>
+            <if test="staff != null and staff != ''">#{staff},</if>
+            <if test="teamDoctor != null and teamDoctor != ''">#{teamDoctor},</if>
+            <if test="contactInfo != null and contactInfo != ''">#{contactInfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRegistrationMaster" parameterType="RegistrationMaster">
+        update registration_master
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teamGroup != null and teamGroup != ''">team_group = #{teamGroup},</if>
+            <if test="teamName != null and teamName != ''">team_name = #{teamName},</if>
+            <if test="teamLeader != null and teamLeader != ''">team_leader = #{teamLeader},</if>
+            <if test="teamCaptain != null and teamCaptain != ''">team_captain = #{teamCaptain},</if>
+            <if test="coach != null and coach != ''">coach = #{coach},</if>
+            <if test="staff != null and staff != ''">staff = #{staff},</if>
+            <if test="teamDoctor != null and teamDoctor != ''">team_doctor = #{teamDoctor},</if>
+            <if test="contactInfo != null and contactInfo != ''">contact_info = #{contactInfo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRegistrationMasterById" parameterType="Long">
+        delete from registration_master where id = #{id}
+    </delete>
+
+    <delete id="deleteRegistrationMasterByIds" parameterType="String">
+        delete from registration_master where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteRegistrationDetailByIds" parameterType="String">
+        delete from registration_detail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteRegistrationDetailById" parameterType="Long">
+        delete from registration_detail where id = #{id}
+    </delete>
+
+    <insert id="batchRegistrationDetail">
+        insert into registration_detail( id, master_id, student_id, name, gender, id_card_number, project1, project2, relay_race, tug_of_war, remark) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.id}, #{item.masterId}, #{item.studentId}, #{item.name}, #{item.gender}, #{item.idCardNumber}, #{item.project1}, #{item.project2}, #{item.relayRace}, #{item.tugOfWar}, #{item.remark})
+        </foreach>
+    </insert>
+</mapper>
