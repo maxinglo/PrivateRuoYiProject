@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.tool;
 
 import com.ruoyi.common.SustechEmail.SustechEmail;
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api("邮件发送")
 @Validated
+@Anonymous
 @RestController
 @RequestMapping("/system/Email")
 public class EMailSendController extends BaseController {
