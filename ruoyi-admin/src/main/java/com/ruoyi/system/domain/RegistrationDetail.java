@@ -54,6 +54,9 @@ public class RegistrationDetail extends BaseEntity
     @Excel(name = "拔河比赛")
     private String tugOfWar;
 
+    /** 验证码 */
+    private String verificationCode;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -160,5 +163,13 @@ public class RegistrationDetail extends BaseEntity
             .append("tugOfWar", getTugOfWar())
             .append("remark", getRemark())
             .toString();
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

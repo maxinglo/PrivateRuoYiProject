@@ -62,7 +62,30 @@ public class EMailSendServiceImpl implements IEMailSendService {
             helper.setFrom(sendMailer);
             helper.setTo(to);
             helper.setSubject("注册验证码");// 接收调用方传入的验证码
-            String VALIDATE_CODE_TEMPLATE = "<!DOCTYPE html>\n" +
+            String VALIDATE_CODE_TEMPLATE =
+                    "<!DOCTYPE html>\n" +
+                            "<html lang=\"en\">\n" +
+                            "  <head>\n" +
+                            "    <meta charset=\"UTF-8\" />\n" +
+                            "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n" +
+                            "    <title>您的验证码请求</title>\n" +
+                            "  </head>\n" +
+                            "  <body>\n" +
+                            "    <h2 style=\"text-align: center;\">验证您的南科大邮箱</h2>\n" +
+                            "    <p style=\"text-indent: 2em;\">尊敬的老师，</p>\n" +
+                            "    <p style=\"text-indent: 2em;\">\n" +
+                            "      您好！我们在进行系统功能检查，需要向您的邮箱： $EMAIL$ 发送一个验证码，以验证功能的可用性。\n" +
+                            "顺便一提，这是我们课程作业的一部分，以实现自动发送邮件的功能。看起来我们的课程正在起飞，很快我们就会迈向更复杂的编程任务！您的验证码是：\n" +
+                            "    </p>\n" +
+                            "    <h1 style=\"color: #1890ff; text-align: center;\">\n" +
+                            "      $CODE$\n" +
+                            "    </h1>\n" +
+                            "    <p style=\"text-indent: 2em;\">如果您有任何问题，或者对我们课程的一部分感到好奇，随时联系我！我们非常愿意分享我们在课程中学到的新知识。</p>\n" +
+                            "    <p style=\"text-indent: 2em;\">祝好，</p>\n" +
+                            "    <p style=\"text-indent: 2em;\">马邢龙、黄俊、常旭峰</p>\n" +
+                            "  </body>\n" +
+                            "</html>";
+                    /*"<!DOCTYPE html>\n" +
                     "<html lang=\"en\">\n" +
                     "  <head>\n" +
                     "    <meta charset=\"UTF-8\" />\n" +
@@ -80,7 +103,7 @@ public class EMailSendServiceImpl implements IEMailSendService {
                     "    </h1>\n" +
                     "    <p style=\"text-indent: 2em;\">此验证码将于5分钟后失效，请您尽快完成验证。</p>\n" +
                     "  </body>\n" +
-                    "</html>";
+                    "</html>";*/
             String text = VALIDATE_CODE_TEMPLATE.replace("$EMAIL$", to).replace("$CODE$", verifyCode);
             helper.setText(text,true);
             javaMailSender.send(message);
