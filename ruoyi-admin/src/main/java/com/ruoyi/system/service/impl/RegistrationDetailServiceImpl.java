@@ -11,7 +11,7 @@ import com.ruoyi.system.service.IRegistrationDetailService;
  * 报名子表Service业务层处理
  * 
  * @author Maxing
- * @date 2023-05-06
+ * @date 2023-05-26
  */
 @Service
 public class RegistrationDetailServiceImpl implements IRegistrationDetailService 

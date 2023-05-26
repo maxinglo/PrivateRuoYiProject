@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.RegistrationDetail;
  * 报名子表Service接口
  * 
  * @author Maxing
- * @date 2023-05-06
+ * @date 2023-05-26
  */
 public interface IRegistrationDetailService 
 {

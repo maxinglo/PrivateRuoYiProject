@@ -17,10 +17,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="名字" prop="name">
+      <el-form-item label="姓名" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入名字"
+          placeholder="请输入姓名"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -35,10 +35,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="身份证号码" prop="idCardNumber">
+      <el-form-item label="身份证号" prop="idCardNumber">
         <el-input
           v-model="queryParams.idCardNumber"
-          placeholder="请输入身份证号码"
+          placeholder="请输入身份证号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -59,18 +59,34 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="接力赛" prop="relayRace">
+      <el-form-item label="团体赛一" prop="relayRace">
         <el-input
           v-model="queryParams.relayRace"
-          placeholder="请输入接力赛"
+          placeholder="请输入团体赛一"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="拔河比赛" prop="tugOfWar">
+      <el-form-item label="团体赛二" prop="relayRace2">
         <el-input
-          v-model="queryParams.tugOfWar"
-          placeholder="请输入拔河比赛"
+          v-model="queryParams.relayRace2"
+          placeholder="请输入团体赛二"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input
+          v-model="queryParams.email"
+          placeholder="请输入邮箱"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="手机号" prop="phoneNumber">
+        <el-input
+          v-model="queryParams.phoneNumber"
+          placeholder="请输入手机号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -124,34 +140,26 @@
           v-hasPermi="['system:RegistrationDetails:export']"
         >导出</el-button>
       </el-col>
-      <el-col :span = "1.5">
-        <el-button
-          type="warning"
-          plain
-          size = "mini"
-          @click="mailSend"
-          >发送测试邮件
-        </el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="RegistrationDetailsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="标识符" align="center" prop="id" />
-      <el-table-column label="主表ID" align="center" prop="masterId" />
       <el-table-column label="学工号" align="center" prop="studentId" />
-      <el-table-column label="名字" align="center" prop="name" />
+      <el-table-column label="姓名" align="center" prop="name" />
       <el-table-column label="性别" align="center" prop="gender">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.gender"/>
         </template>
       </el-table-column>
-      <el-table-column label="身份证号码" align="center" prop="idCardNumber" />
+      <el-table-column label="身份证号" align="center" prop="idCardNumber" />
       <el-table-column label="项目一" align="center" prop="project1" />
       <el-table-column label="项目二" align="center" prop="project2" />
-      <el-table-column label="接力赛" align="center" prop="relayRace" />
-      <el-table-column label="拔河比赛" align="center" prop="tugOfWar" />
+      <el-table-column label="团体赛一" align="center" prop="relayRace" />
+      <el-table-column label="团体赛二" align="center" prop="relayRace2" />
+      <el-table-column label="邮箱" align="center" prop="email" />
+      <el-table-column label="手机号" align="center" prop="phoneNumber" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -172,7 +180,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -190,8 +198,8 @@
         <el-form-item label="学工号" prop="studentId">
           <el-input v-model="form.studentId" placeholder="请输入学工号" />
         </el-form-item>
-        <el-form-item label="名字" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名字" />
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="form.name" placeholder="请输入姓名" />
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select v-model="form.gender" placeholder="请选择性别">
@@ -203,8 +211,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="身份证号码" prop="idCardNumber">
-          <el-input v-model="form.idCardNumber" placeholder="请输入身份证号码" />
+        <el-form-item label="身份证号" prop="idCardNumber">
+          <el-input v-model="form.idCardNumber" placeholder="请输入身份证号" />
         </el-form-item>
         <el-form-item label="项目一" prop="project1">
           <el-input v-model="form.project1" placeholder="请输入项目一" />
@@ -212,11 +220,17 @@
         <el-form-item label="项目二" prop="project2">
           <el-input v-model="form.project2" placeholder="请输入项目二" />
         </el-form-item>
-        <el-form-item label="接力赛" prop="relayRace">
-          <el-input v-model="form.relayRace" placeholder="请输入接力赛" />
+        <el-form-item label="团体赛一" prop="relayRace">
+          <el-input v-model="form.relayRace" placeholder="请输入团体赛一" />
         </el-form-item>
-        <el-form-item label="拔河比赛" prop="tugOfWar">
-          <el-input v-model="form.tugOfWar" placeholder="请输入拔河比赛" />
+        <el-form-item label="团体赛二" prop="relayRace2">
+          <el-input v-model="form.relayRace2" placeholder="请输入团体赛二" />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="form.email" placeholder="请输入邮箱" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="phoneNumber">
+          <el-input v-model="form.phoneNumber" placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
@@ -231,14 +245,7 @@
 </template>
 
 <script>
-import {
-  listRegistrationDetails,
-  getRegistrationDetails,
-  delRegistrationDetails,
-  addRegistrationDetails,
-  updateRegistrationDetails,
-  sendTestMail
-} from "@/api/system/RegistrationDetails";
+import { listRegistrationDetails, getRegistrationDetails, delRegistrationDetails, addRegistrationDetails, updateRegistrationDetails } from "@/api/system/RegistrationDetails";
 
 export default {
   name: "RegistrationDetails",
@@ -275,7 +282,9 @@ export default {
         project1: null,
         project2: null,
         relayRace: null,
-        tugOfWar: null,
+        relayRace2: null,
+        email: null,
+        phoneNumber: null,
       },
       // 表单参数
       form: {},
@@ -288,13 +297,13 @@ export default {
           { required: true, message: "学工号不能为空", trigger: "blur" }
         ],
         name: [
-          { required: true, message: "名字不能为空", trigger: "blur" }
+          { required: true, message: "姓名不能为空", trigger: "blur" }
         ],
         gender: [
           { required: true, message: "性别不能为空", trigger: "change" }
         ],
         idCardNumber: [
-          { required: true, message: "身份证号码不能为空", trigger: "blur" }
+          { required: true, message: "身份证号不能为空", trigger: "blur" }
         ],
         project1: [
           { required: true, message: "项目一不能为空", trigger: "blur" }
@@ -303,10 +312,13 @@ export default {
           { required: true, message: "项目二不能为空", trigger: "blur" }
         ],
         relayRace: [
-          { required: true, message: "接力赛不能为空", trigger: "blur" }
+          { required: true, message: "团体赛一不能为空", trigger: "blur" }
         ],
-        tugOfWar: [
-          { required: true, message: "拔河比赛不能为空", trigger: "blur" }
+        email: [
+          { required: true, message: "邮箱不能为空", trigger: "blur" }
+        ],
+        phoneNumber: [
+          { required: true, message: "手机号不能为空", trigger: "blur" }
         ],
       }
     };
@@ -341,7 +353,9 @@ export default {
         project1: null,
         project2: null,
         relayRace: null,
-        tugOfWar: null,
+        relayRace2: null,
+        email: null,
+        phoneNumber: null,
         remark: null
       };
       this.resetForm("form");
@@ -413,10 +427,6 @@ export default {
       this.download('system/RegistrationDetails/export', {
         ...this.queryParams
       }, `RegistrationDetails_${new Date().getTime()}.xlsx`)
-    },
-    /** 发送邮件按钮操作*/
-    mailSend(){
-      return sendTestMail();
     }
   }
 };

@@ -1,4 +1,4 @@
-package com.ruoyi.web;
+package com.ruoyi.web.controller;
 
 import com.ruoyi.common.SustechEmail.SustechEmail;
 import com.ruoyi.common.annotation.Anonymous;

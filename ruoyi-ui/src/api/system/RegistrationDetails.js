@@ -42,11 +42,3 @@ export function delRegistrationDetails(id) {
     method: 'delete'
   })
 }
-
-// 发送测试邮件
-export function sendTestMail(){
-  return request({
-    url:'/system/Email/VerificationCode/'+'1046606655@qq.com',
-    method:'get'
-  })
-}

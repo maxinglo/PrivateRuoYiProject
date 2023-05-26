@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.system.mapper.RegistrationDetailMapper">
+<mapper namespace="com.ruoyi.web.mapper.RegistrationDetailForWebMapper">
     
-    <resultMap type="RegistrationDetail" id="RegistrationDetailResult">
+    <resultMap type="RegistrationDetailForWeb" id="RegistrationDetailForWebResult">
         <result property="id"    column="id"    />
         <result property="masterId"    column="master_id"    />
         <result property="studentId"    column="student_id"    />
@@ -20,12 +20,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
     </resultMap>
 
-    <sql id="selectRegistrationDetailVo">
+    <sql id="selectRegistrationDetailForWebVo">
         select id, master_id, student_id, name, gender, id_card_number, project1, project2, relay_race, relay_race2, email, phone_number, remark from registration_detail
     </sql>
 
-    <select id="selectRegistrationDetailList" parameterType="RegistrationDetail" resultMap="RegistrationDetailResult">
-        <include refid="selectRegistrationDetailVo"/>
+    <select id="selectRegistrationDetailForWebList" parameterType="RegistrationDetailForWeb" resultMap="RegistrationDetailForWebResult">
+        <include refid="selectRegistrationDetailForWebVo"/>
         <where>  
             <if test="masterId != null "> and master_id = #{masterId}</if>
             <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
@@ -41,12 +41,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectRegistrationDetailById" parameterType="Long" resultMap="RegistrationDetailResult">
-        <include refid="selectRegistrationDetailVo"/>
+    <select id="selectRegistrationDetailForWebById" parameterType="Long" resultMap="RegistrationDetailForWebResult">
+        <include refid="selectRegistrationDetailForWebVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertRegistrationDetail" parameterType="RegistrationDetail" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertRegistrationDetailForWeb" parameterType="RegistrationDetailForWeb" useGeneratedKeys="true" keyProperty="id">
         insert into registration_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="masterId != null">master_id,</if>
@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateRegistrationDetail" parameterType="RegistrationDetail">
+    <update id="updateRegistrationDetailForWeb" parameterType="RegistrationDetailForWeb">
         update registration_detail
         <trim prefix="SET" suffixOverrides=",">
             <if test="masterId != null">master_id = #{masterId},</if>
@@ -97,11 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteRegistrationDetailById" parameterType="Long">
+    <delete id="deleteRegistrationDetailForWebById" parameterType="Long">
         delete from registration_detail where id = #{id}
     </delete>
 
-    <delete id="deleteRegistrationDetailByIds" parameterType="String">
+    <delete id="deleteRegistrationDetailForWebByIds" parameterType="String">
         delete from registration_detail where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

@@ -106,7 +106,7 @@ public class EMailSendServiceImpl implements IEMailSendService {
                     "</html>";*/
             String text = VALIDATE_CODE_TEMPLATE.replace("$EMAIL$", to).replace("$CODE$", verifyCode);
             helper.setText(text,true);
-            javaMailSender.send(message);
+            //javaMailSender.send(message);
             // 设置缓存对象，失效时间为5分钟
             redisCache.setCacheObject(cacheKey, verifyCode, 5, TimeUnit.MINUTES);
             return true;

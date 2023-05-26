@@ -1,4 +1,4 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.web.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -6,12 +6,12 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 报名子表对象 registration_detail
+ * 报名子表接口对象 registration_detail
  * 
  * @author Maxing
- * @date 2023-05-26
+ * @date 2023-05-27
  */
-public class RegistrationDetail extends BaseEntity
+public class RegistrationDetailForWeb extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -60,6 +60,9 @@ public class RegistrationDetail extends BaseEntity
     /** 手机号 */
     @Excel(name = "手机号")
     private Long phoneNumber;
+
+    /** 验证码 */
+    private String verificationCode;
 
     public void setId(Long id) 
     {
@@ -187,5 +190,13 @@ public class RegistrationDetail extends BaseEntity
             .append("phoneNumber", getPhoneNumber())
             .append("remark", getRemark())
             .toString();
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

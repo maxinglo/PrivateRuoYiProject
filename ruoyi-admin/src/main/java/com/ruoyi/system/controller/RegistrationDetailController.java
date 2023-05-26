@@ -4,7 +4,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.annotation.Anonymous;
-import com.ruoyi.common.core.redis.RedisCache;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +27,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 报名子表Controller
  * 
  * @author Maxing
- * @date 2023-05-06
+ * @date 2023-05-26
  */
 @Anonymous
 @RestController
@@ -38,8 +37,6 @@ public class RegistrationDetailController extends BaseController
     @Autowired
     private IRegistrationDetailService registrationDetailService;
 
-    @Autowired
-    private RedisCache redisCache;
     /**
      * 查询报名子表列表
      */
@@ -83,8 +80,6 @@ public class RegistrationDetailController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody RegistrationDetail registrationDetail)
     {
-        //String cacheKey = "verificationCode:"+registrationDetail.;
-        //if (registrationDetail.getVerificationCode().equals(redisCache.getCacheObject()))
         return toAjax(registrationDetailService.insertRegistrationDetail(registrationDetail));
     }
 
