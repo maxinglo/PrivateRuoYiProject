@@ -1,7 +1,13 @@
 package com.ruoyi.system.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.annotation.Anonymous;
+import com.ruoyi.system.domain.RegistrationDetail;
+import com.ruoyi.system.service.IRegistrationDetailService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +39,9 @@ public class RegistrationMasterController extends BaseController
 {
     @Autowired
     private IRegistrationMasterService registrationMasterService;
+
+    @Autowired
+    private IRegistrationDetailService registrationDetailService;
 
     /**
      * 查询报名主表列表
@@ -100,5 +109,21 @@ public class RegistrationMasterController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(registrationMasterService.deleteRegistrationMasterByIds(ids));
+    }
+
+    @Anonymous
+    @PostMapping("/exportExcel")
+    public AjaxResult exportExcel(RegistrationMaster registrationMaster)
+    {
+        List<RegistrationMaster> list = registrationMasterService.selectRegistrationMasterList(registrationMaster);
+        HashMap<RegistrationMaster, List> map = new HashMap<>();
+        for (RegistrationMaster registrationMaster1 : list){
+            map.put(registrationMaster1,registrationDetailService.selectRegistrationDetailByMasterId(registrationMaster1.getId()));
+        }
+        for (RegistrationMaster registrationMaster1 : map.keySet()) {
+            System.out.println(registrationMaster1);
+            System.out.println(map.get(registrationMaster1));
+        }
+        return AjaxResult.success("查询成功");
     }
 }

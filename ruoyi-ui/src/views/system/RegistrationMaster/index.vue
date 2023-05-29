@@ -117,7 +117,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="RegistrationMasterList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="RegistrationMasterList" @selection-change="handleSelectionChange" highlight-row :row-key ="row => row.id">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="标识符" align="center" prop="id" />
       <el-table-column label="组别" align="center" prop="teamGroup" />
@@ -147,7 +147,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"

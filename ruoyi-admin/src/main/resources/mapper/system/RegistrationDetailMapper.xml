@@ -45,7 +45,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectRegistrationDetailVo"/>
         where id = #{id}
     </select>
-        
+    <select id="selectRegistrationDetailByMasterId" parameterType="Long" resultMap="RegistrationDetailResult">
+        <include refid="selectRegistrationDetailVo"/>
+        where master_id = #{masterId}
+    </select>
+
+
     <insert id="insertRegistrationDetail" parameterType="RegistrationDetail" useGeneratedKeys="true" keyProperty="id">
         insert into registration_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">

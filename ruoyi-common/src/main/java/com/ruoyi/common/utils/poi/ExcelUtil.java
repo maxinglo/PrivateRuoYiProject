@@ -1462,6 +1462,53 @@ public class ExcelUtil<T>
         }
         return fields;
     }
+    public List<Object[]> getFields(Class<T> clazz)
+    {
+        List<Object[]> fields = new ArrayList<Object[]>();
+        List<Field> tempFields = new ArrayList<>();
+        tempFields.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredFields()));
+        tempFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        for (Field field : tempFields)
+        {
+            if (!ArrayUtils.contains(this.excludeFields, field.getName()))
+            {
+                // 单注解
+                if (field.isAnnotationPresent(Excel.class))
+                {
+                    Excel attr = field.getAnnotation(Excel.class);
+                    if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                    {
+                        field.setAccessible(true);
+                        fields.add(new Object[] { field, attr });
+                    }
+                    if (Collection.class.isAssignableFrom(field.getType()))
+                    {
+                        subMethod = getSubMethod(field.getName(), clazz);
+                        ParameterizedType pt = (ParameterizedType) field.getGenericType();
+                        Class<?> subClass = (Class<?>) pt.getActualTypeArguments()[0];
+                        this.subFields = FieldUtils.getFieldsListWithAnnotation(subClass, Excel.class);
+                    }
+                }
+
+                // 多注解
+                if (field.isAnnotationPresent(Excels.class))
+                {
+                    Excels attrs = field.getAnnotation(Excels.class);
+                    Excel[] excels = attrs.value();
+                    for (Excel attr : excels)
+                    {
+                        if (!ArrayUtils.contains(this.excludeFields, field.getName() + "." + attr.targetAttr())
+                                && (attr != null && (attr.type() == Type.ALL || attr.type() == type)))
+                        {
+                            field.setAccessible(true);
+                            fields.add(new Object[] { field, attr });
+                        }
+                    }
+                }
+            }
+        }
+        return fields;
+    }
 
     /**
      * 根据注解获取最大行高

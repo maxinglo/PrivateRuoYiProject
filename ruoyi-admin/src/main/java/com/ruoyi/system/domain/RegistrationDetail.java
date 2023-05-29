@@ -30,7 +30,7 @@ public class RegistrationDetail extends BaseEntity
     private String name;
 
     /** 性别 */
-    @Excel(name = "性别")
+    @Excel(name = "性别",dictType = "sys_user_sex")
     private String gender;
 
     /** 身份证号 */

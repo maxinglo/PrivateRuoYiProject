@@ -58,4 +58,12 @@ public interface IRegistrationDetailService
      * @return 结果
      */
     public int deleteRegistrationDetailById(Long id);
+
+    /**
+     * 依据主表ID查询子表
+     *
+     * @param masterId 需要查询的主表ID
+     * @return 结果
+     */
+    public List<RegistrationDetail> selectRegistrationDetailByMasterId(Long masterId);
 }

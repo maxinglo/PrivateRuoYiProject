@@ -177,10 +177,17 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:RegistrationDetails:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-warning"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['system:RegistrationDetails:remove']"
+          >拒绝</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"

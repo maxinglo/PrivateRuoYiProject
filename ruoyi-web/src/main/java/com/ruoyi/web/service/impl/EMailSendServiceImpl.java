@@ -1,7 +1,10 @@
 package com.ruoyi.web.service.impl;
 
 import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.service.IEMailSendService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -30,6 +33,8 @@ public class EMailSendServiceImpl implements IEMailSendService {
 
     @Autowired
     private RedisCache redisCache;
+
+    private static final Logger log = LoggerFactory.getLogger(EMailSendServiceImpl.class);
 
     public void SendTextMailMessage(String to, String subject, String text) {
         try {
@@ -106,9 +111,10 @@ public class EMailSendServiceImpl implements IEMailSendService {
                     "</html>";*/
             String text = VALIDATE_CODE_TEMPLATE.replace("$EMAIL$", to).replace("$CODE$", verifyCode);
             helper.setText(text,true);
-            //javaMailSender.send(message);
+            javaMailSender.send(message);
             // 设置缓存对象，失效时间为5分钟
             redisCache.setCacheObject(cacheKey, verifyCode, 5, TimeUnit.MINUTES);
+            log.info("验证码:"+verifyCode+"已发送至邮箱：" + to);
             return true;
         }catch (MessagingException e) {
             return false;

@@ -90,4 +90,15 @@ public class RegistrationDetailServiceImpl implements IRegistrationDetailService
     {
         return registrationDetailMapper.deleteRegistrationDetailById(id);
     }
+    /**
+     * 依据主表ID查询子表
+     *
+     * @param masterId 需要查询的主表ID
+     * @return 结果
+     */
+    @Override
+    public List<RegistrationDetail> selectRegistrationDetailByMasterId(Long masterId)
+    {
+        return registrationDetailMapper.selectRegistrationDetailByMasterId(masterId);
+    }
 }
