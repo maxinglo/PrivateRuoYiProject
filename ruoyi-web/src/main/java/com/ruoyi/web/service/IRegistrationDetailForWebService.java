@@ -20,6 +20,14 @@ public interface IRegistrationDetailForWebService
     public RegistrationDetailForWeb selectRegistrationDetailForWebById(Long id);
 
     /**
+     * 查询报名子表接口
+     *
+     * @param email 报名子表邮箱
+     * @return 报名子表接口
+     */
+    public RegistrationDetailForWeb selectRegistrationDetailForWebByEmail(String email);
+
+    /**
      * 查询报名子表接口列表
      * 
      * @param registrationDetailForWeb 报名子表接口
@@ -46,9 +54,11 @@ public interface IRegistrationDetailForWebService
     /**
      * 批量删除报名子表接口
      * 
-     * @param ids 需要删除的报名子表接口主键集合
+     * @param email 需要更新的报名子表接口邮箱
      * @return 结果
      */
+
+    public int updateRegistrationDetailForWebByEmail(RegistrationDetailForWeb registrationDetailForWeb);
     public int deleteRegistrationDetailForWebByIds(Long[] ids);
 
     /**
@@ -58,4 +68,12 @@ public interface IRegistrationDetailForWebService
      * @return 结果
      */
     public int deleteRegistrationDetailForWebById(Long id);
+
+    /**
+     * 删除报名子表接口信息
+     *
+     * @param email 报名子表接口邮箱
+     * @return 结果
+     */
+    public int deleteRegistrationDetailForWebByEmail(String email);
 }

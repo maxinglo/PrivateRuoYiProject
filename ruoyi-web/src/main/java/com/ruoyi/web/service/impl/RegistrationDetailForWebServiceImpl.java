@@ -32,6 +32,16 @@ public class RegistrationDetailForWebServiceImpl implements IRegistrationDetailF
     }
 
     /**
+     * 查询报名子表接口
+     *
+     * @param email 报名子表邮箱
+     * @return 报名子表接口
+     */
+    @Override
+    public RegistrationDetailForWeb selectRegistrationDetailForWebByEmail(String email) {
+        return registrationDetailForWebMapper.selectRegistrationDetailForWebByEmail(email);
+    }
+    /**
      * 查询报名子表接口列表
      * 
      * @param registrationDetailForWeb 报名子表接口
@@ -67,6 +77,11 @@ public class RegistrationDetailForWebServiceImpl implements IRegistrationDetailF
         return registrationDetailForWebMapper.updateRegistrationDetailForWeb(registrationDetailForWeb);
     }
 
+    @Override
+    public int updateRegistrationDetailForWebByEmail(RegistrationDetailForWeb registrationDetailForWeb) {
+        return registrationDetailForWebMapper.updateRegistrationDetailForWebByEmail(registrationDetailForWeb);
+    }
+
     /**
      * 批量删除报名子表接口
      * 
@@ -89,5 +104,16 @@ public class RegistrationDetailForWebServiceImpl implements IRegistrationDetailF
     public int deleteRegistrationDetailForWebById(Long id)
     {
         return registrationDetailForWebMapper.deleteRegistrationDetailForWebById(id);
+    }
+
+    /**
+     * 删除报名子表接口信息
+     *
+     * @param email 报名子表接口邮箱
+     * @return 结果
+     */
+    @Override
+    public int deleteRegistrationDetailForWebByEmail(String email) {
+        return registrationDetailForWebMapper.deleteRegistrationDetailForWebByEmail(email);
     }
 }

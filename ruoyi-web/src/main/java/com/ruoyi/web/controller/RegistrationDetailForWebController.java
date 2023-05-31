@@ -1,28 +1,21 @@
 package com.ruoyi.web.controller;
 
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-
 import com.ruoyi.common.annotation.Anonymous;
-import com.ruoyi.common.core.redis.RedisCache;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.domain.RegistrationDetailForWeb;
 import com.ruoyi.web.service.IRegistrationDetailForWebService;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 报名子表接口Controller
@@ -33,20 +26,19 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @Anonymous
 @RestController
 @RequestMapping("/web/RegistrationDetailsForWeb")
-public class RegistrationDetailForWebController extends BaseController
-{
+public class RegistrationDetailForWebController extends BaseController {
     @Autowired
     private IRegistrationDetailForWebService registrationDetailForWebService;
 
     @Autowired
     private RedisCache redisCache;
+
     /**
      * 查询报名子表接口列表
      */
     @PreAuthorize("@ss.hasPermi('web:RegistrationDetailsForWeb:list')")
     @GetMapping("/list")
-    public TableDataInfo list(RegistrationDetailForWeb registrationDetailForWeb)
-    {
+    public TableDataInfo list(RegistrationDetailForWeb registrationDetailForWeb) {
         startPage();
         List<RegistrationDetailForWeb> list = registrationDetailForWebService.selectRegistrationDetailForWebList(registrationDetailForWeb);
         return getDataTable(list);
@@ -58,8 +50,7 @@ public class RegistrationDetailForWebController extends BaseController
     @PreAuthorize("@ss.hasPermi('web:RegistrationDetailsForWeb:export')")
     @Log(title = "报名子表接口", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, RegistrationDetailForWeb registrationDetailForWeb)
-    {
+    public void export(HttpServletResponse response, RegistrationDetailForWeb registrationDetailForWeb) {
         List<RegistrationDetailForWeb> list = registrationDetailForWebService.selectRegistrationDetailForWebList(registrationDetailForWeb);
         ExcelUtil<RegistrationDetailForWeb> util = new ExcelUtil<RegistrationDetailForWeb>(RegistrationDetailForWeb.class);
         util.exportExcel(response, list, "报名子表接口数据");
@@ -68,11 +59,21 @@ public class RegistrationDetailForWebController extends BaseController
     /**
      * 获取报名子表接口详细信息
      */
-    @PreAuthorize("@ss.hasPermi('web:RegistrationDetailsForWeb:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
-    {
-        return success(registrationDetailForWebService.selectRegistrationDetailForWebById(id));
+    @Anonymous
+    @GetMapping(value = "/getInfo")
+    public AjaxResult getInfo(@RequestParam("Email") String Email, @RequestParam("VerificationCode") String VerificationCode) {
+        String cacheKey = "verification_code:" + Email;
+        if (redisCache.hasKey(cacheKey)) {
+            String verificationCode = redisCache.getCacheObject(cacheKey);
+            if (verificationCode.equalsIgnoreCase(VerificationCode)) {
+                redisCache.deleteObject(cacheKey);
+                return success(registrationDetailForWebService.selectRegistrationDetailForWebByEmail(Email));
+            } else {
+                return AjaxResult.error("验证码错误");
+            }
+        } else {
+            return AjaxResult.error("验证码已过期");
+        }
     }
 
     /**
@@ -80,20 +81,33 @@ public class RegistrationDetailForWebController extends BaseController
      */
     @Anonymous
     @PostMapping
-    public AjaxResult add(@RequestBody RegistrationDetailForWeb registrationDetailForWeb)
-    {
+    public AjaxResult add(@RequestBody RegistrationDetailForWeb registrationDetailForWeb) {
         String cacheKey = "verification_code:" + registrationDetailForWeb.getEmail();
-        try{
+        if (redisCache.hasKey(cacheKey)) {
             String verificationCode = redisCache.getCacheObject(cacheKey);
-            if(verificationCode.equalsIgnoreCase(registrationDetailForWeb.getVerificationCode())){
-                redisCache.deleteObject(cacheKey);
-                return toAjax(registrationDetailForWebService.insertRegistrationDetailForWeb(registrationDetailForWeb));
-            }else {
+            if (verificationCode.equalsIgnoreCase(registrationDetailForWeb.getVerificationCode())) {
+                try {
+                    int result = registrationDetailForWebService.insertRegistrationDetailForWeb(registrationDetailForWeb);
+                    if (result > 0) {
+                        redisCache.deleteObject(cacheKey);
+                        return toAjax(result);
+                    }
+                } catch (Exception e) {
+                    redisCache.deleteObject(cacheKey);
+                    if (e.getMessage().contains("Duplicate entry") && (e.getMessage().contains("email")||e.getMessage().contains("student_id"))) {
+                        // 邮箱重复
+                        // 根据邮箱更新报名信息
+                        return toAjax(registrationDetailForWebService.updateRegistrationDetailForWebByEmail(registrationDetailForWeb));
+                    }
+                }
+
+            } else {
                 return AjaxResult.error("验证码错误");
             }
-        }catch (Exception e){
+        } else {
             return AjaxResult.error("验证码已过期");
         }
+        return AjaxResult.error("未知错误");
     }
 
     /**
@@ -102,8 +116,7 @@ public class RegistrationDetailForWebController extends BaseController
     @PreAuthorize("@ss.hasPermi('web:RegistrationDetailsForWeb:edit')")
     @Log(title = "报名子表接口", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody RegistrationDetailForWeb registrationDetailForWeb)
-    {
+    public AjaxResult edit(@RequestBody RegistrationDetailForWeb registrationDetailForWeb) {
         return toAjax(registrationDetailForWebService.updateRegistrationDetailForWeb(registrationDetailForWeb));
     }
 
@@ -112,9 +125,8 @@ public class RegistrationDetailForWebController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('web:RegistrationDetailsForWeb:remove')")
     @Log(title = "报名子表接口", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
-    {
+    @DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(registrationDetailForWebService.deleteRegistrationDetailForWebByIds(ids));
     }
 }

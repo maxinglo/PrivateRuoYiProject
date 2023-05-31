@@ -45,6 +45,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectRegistrationDetailForWebVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectRegistrationDetailForWebByEmail" parameterType="String" resultMap="RegistrationDetailForWebResult">
+        <include refid="selectRegistrationDetailForWebVo"/>
+        where email = #{email}
+    </select>
         
     <insert id="insertRegistrationDetailForWeb" parameterType="RegistrationDetailForWeb" useGeneratedKeys="true" keyProperty="id">
         insert into registration_detail
@@ -96,9 +101,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where id = #{id}
     </update>
+    
+    <update id="updateRegistrationDetailForWebByEmail" parameterType="RegistrationDetailForWeb">
+        update registration_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="masterId != null">master_id = #{masterId},</if>
+            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="idCardNumber != null and idCardNumber != ''">id_card_number = #{idCardNumber},</if>
+            <if test="project1 != null and project1 != ''">project1 = #{project1},</if>
+            <if test="project2 != null and project2 != ''">project2 = #{project2},</if>
+            <if test="relayRace != null and relayRace != ''">relay_race = #{relayRace},</if>
+            <if test="relayRace2 != null">relay_race2 = #{relayRace2},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where email = #{email}
+    </update>
 
     <delete id="deleteRegistrationDetailForWebById" parameterType="Long">
         delete from registration_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteRegistrationDetailForWebByEmail" parameterType="String">
+        delete from registration_detail where email = #{email}
     </delete>
 
     <delete id="deleteRegistrationDetailForWebByIds" parameterType="String">

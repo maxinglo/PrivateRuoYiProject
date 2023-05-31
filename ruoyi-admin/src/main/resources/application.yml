@@ -10,6 +10,7 @@ ruoyi:
   demoEnabled: false
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: D:/ruoyi/uploadPath
+#  profile: C:/Users/Administrator/Desktop/ruoyi/uploadPath
   # 获取ip地址开关
   addressEnabled: false
   # 验证码类型 math 数组计算 char 字符验证
@@ -70,7 +71,8 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: maxing.site
+    host: 116.198.199.86
+#    host: localhost
     # 端口，默认为6379
     port: 6379
     # 数据库索引

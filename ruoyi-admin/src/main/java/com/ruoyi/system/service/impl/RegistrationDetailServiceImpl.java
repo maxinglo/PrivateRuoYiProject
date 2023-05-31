@@ -1,6 +1,8 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.RegistrationDetailMapper;
@@ -52,7 +54,7 @@ public class RegistrationDetailServiceImpl implements IRegistrationDetailService
     @Override
     public int insertRegistrationDetail(RegistrationDetail registrationDetail)
     {
-        return registrationDetailMapper.insertRegistrationDetail(registrationDetail);
+            return registrationDetailMapper.insertRegistrationDetail(registrationDetail);
     }
 
     /**

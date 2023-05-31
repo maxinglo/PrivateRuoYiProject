@@ -20,6 +20,14 @@ public interface RegistrationDetailForWebMapper
     public RegistrationDetailForWeb selectRegistrationDetailForWebById(Long id);
 
     /**
+     * 查询报名子表接口
+     *
+     * @param email 报名子表邮箱
+     * @return 报名子表接口
+     */
+    public RegistrationDetailForWeb selectRegistrationDetailForWebByEmail(String email);
+
+    /**
      * 查询报名子表接口列表
      * 
      * @param registrationDetailForWeb 报名子表接口
@@ -58,4 +66,8 @@ public interface RegistrationDetailForWebMapper
      * @return 结果
      */
     public int deleteRegistrationDetailForWebByIds(Long[] ids);
+
+    public int deleteRegistrationDetailForWebByEmail(String email);
+
+    public int updateRegistrationDetailForWebByEmail(RegistrationDetailForWeb registrationDetailForWeb);
 }

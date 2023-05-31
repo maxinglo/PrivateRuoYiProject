@@ -149,6 +149,11 @@ public @interface Excel
     public String[] args() default {};
 
     /**
+     * 是否为sheetName
+     */
+    public boolean isSheetName() default false;
+
+    /**
      * 字段类型（0：导出导入；1：仅导出；2：仅导入）
      */
     Type type() default Type.ALL;
